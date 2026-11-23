@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated Desi Beats user profile.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "email": { "type": "string", "description": "User email address" },
+        "photoUrl": { "type": "string", "description": "Optional profile avatar URL" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update" }
+      },
+      "required": ["userId", "displayName", "createdAt", "updatedAt"]
+    },
+    "FavoriteSong": {
+      "title": "FavoriteSong",
+      "description": "A favorited track stored under the user's favorites subcollection.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "songId": { "type": "string" },
+        "title": { "type": "string" },
+        "artist": { "type": "string" },
+        "language": { "type": "string" },
+        "audioUrl": { "type": "string" },
+        "coverUrl": { "type": "string" },
+        "lrcUrl": { "type": "string" },
+        "sourceType": { "type": "string", "enum": ["LOCAL_DEVICE", "REMOTE_LICENSED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "songId", "title", "artist", "language", "audioUrl", "sourceType", "createdAt"]
+    },
+    "Playlist": {
+      "title": "Playlist",
+      "description": "User-created music playlist metadata.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "songCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "songCount", "createdAt", "updatedAt"]
+    },
+    "PlaylistTrack": {
+      "title": "PlaylistTrack",
+      "description": "Track saved inside a user playlist.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "songId": { "type": "string" },
+        "title": { "type": "string" },
+        "artist": { "type": "string" },
+        "language": { "type": "string" },
+        "audioUrl": { "type": "string" },
+        "coverUrl": { "type": "string" },
+        "lrcUrl": { "type": "string" },
+        "sourceType": { "type": "string", "enum": ["LOCAL_DEVICE", "REMOTE_LICENSED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "songId", "title", "artist", "language", "audioUrl", "sourceType", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile document"
+    },
+    "/users/{userId}/favorites/{songId}": {
+      "schema": { "$ref": "#/entities/FavoriteSong" },
+      "description": "User favorite songs"
+    },
+    "/users/{userId}/playlists/{playlistId}": {
+      "schema": { "$ref": "#/entities/Playlist" },
+      "description": "User custom playlists"
+    },
+    "/users/{userId}/playlists/{playlistId}/tracks/{songId}": {
+      "schema": { "$ref": "#/entities/PlaylistTrack" },
+      "description": "Tracks belonging to a user playlist"
+    }
+  }
+}
